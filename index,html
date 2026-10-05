@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EXAMIFY.PK — Coming Soon</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap');
+    
+    html { scroll-behavior: smooth; }
+    body { 
+        font-family: 'Inter', sans-serif; 
+        background-color: #09090b; 
+        color: #f4f4f5; 
+        overflow-x: hidden;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .font-display { font-family: 'Outfit', sans-serif; letter-spacing: -0.04em; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #18181b; }
+    ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #52525b; }
+    
+    * { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+
+    .glow-container {
+        position: relative;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        z-index: 10;
+    }
+
+    .light-source {
+        width: 200px;
+        height: 44px;
+        background: linear-gradient(180deg, #38bdf8 0%, rgba(56, 189, 248, 0.6) 100%);
+        border-radius: 14px 14px 0 0;
+        position: relative;
+        margin-bottom: -12px;
+        z-index: 2;
+        box-shadow: 
+            0 -10px 50px rgba(56, 189, 248, 0.7),
+            0 0 25px rgba(56, 189, 248, 0.9) inset;
+    }
+
+    .volumetric-light {
+        position: absolute;
+        top: 32px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 450px;
+        height: 280px;
+        background: radial-gradient(ellipse at top, rgba(56, 189, 248, 0.4) 0%, rgba(56, 189, 248, 0) 70%);
+        clip-path: polygon(25% 0, 75% 0, 100% 100%, 0% 100%);
+        filter: blur(22px);
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    @media (min-width: 768px) {
+        .light-source { width: 260px; height: 52px; }
+        .volumetric-light { width: 650px; height: 380px; top: 40px; }
+    }
+
+    .massive-title {
+        font-size: 4.5rem;
+        line-height: 0.9;
+        font-weight: 900;
+        color: #ffffff;
+        text-shadow: 0 4px 25px rgba(0,0,0,0.6);
+        position: relative;
+        z-index: 5;
+    }
+    @media (min-width: 768px) {
+        .massive-title { font-size: 8rem; }
+    }
+
+    @keyframes floating-glow {
+        0%, 100% { transform: translateY(0); text-shadow: 0 4px 20px rgba(0,0,0,0.5), 0 0 15px rgba(56, 189, 248, 0.3); }
+        50% { transform: translateY(-6px); text-shadow: 0 12px 30px rgba(0,0,0,0.7), 0 0 45px rgba(56, 189, 248, 0.8); }
+    }
+    .massive-title.animated {
+        animation: floating-glow 3.5s ease-in-out infinite;
+    }
+
+    .massive-title::before,
+    .massive-title::after {
+        content: attr(data-text);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 10;
+    }
+    .massive-title::before {
+        left: 4px;
+        text-shadow: -3px 0 #38bdf8;
+        animation: glitch-anim-1 4s infinite linear alternate-reverse;
+    }
+    .massive-title::after {
+        left: -4px;
+        text-shadow: 3px 0 #ec4899;
+        animation: glitch-anim-2 4s infinite linear alternate-reverse;
+    }
+    
+    @keyframes glitch-anim-1 {
+        0%, 4.9% { opacity: 0; clip-path: inset(100% 0 0 0); }
+        5% { opacity: 1; clip-path: inset(20% 0 60% 0); transform: translate(-4px, 1px) skewX(5deg); }
+        10% { opacity: 1; clip-path: inset(10% 0 40% 0); transform: translate(4px, -1px) skewX(-5deg); }
+        15% { opacity: 1; clip-path: inset(80% 0 5% 0); transform: translate(-4px, 2px) skewX(2deg); }
+        20%, 100% { opacity: 0; clip-path: inset(100% 0 0 0); transform: translate(0, 0); }
+    }
+    @keyframes glitch-anim-2 {
+        0%, 6.9% { opacity: 0; clip-path: inset(100% 0 0 0); }
+        7% { opacity: 1; clip-path: inset(40% 0 20% 0); transform: translate(4px, -1px) skewX(-2deg); }
+        12% { opacity: 1; clip-path: inset(60% 0 10% 0); transform: translate(-4px, 1px) skewX(5deg); }
+        17% { opacity: 1; clip-path: inset(30% 0 50% 0); transform: translate(4px, -2px) skewX(-5deg); }
+        22%, 100% { opacity: 0; clip-path: inset(100% 0 0 0); transform: translate(0, 0); }
+    }
+
+    .timer-block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .timer-number {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #ffffff;
+        line-height: 1;
+    }
+    .timer-colon {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #71717a;
+        margin: 0 10px;
+        transform: translateY(-4px);
+    }
+    .timer-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #a1a1aa;
+        margin-top: 4px;
+        text-transform: capitalize;
+    }
+
+    .glow-btn {
+        background: rgba(56, 189, 248, 0.2);
+        border: 1px solid rgba(56, 189, 248, 0.5);
+        color: #e0f2fe;
+        box-shadow: 0 0 25px rgba(56, 189, 248, 0.2);
+        backdrop-filter: blur(10px);
+    }
+    .glow-btn:hover {
+        background: rgba(56, 189, 248, 0.35);
+        box-shadow: 0 0 35px rgba(56, 189, 248, 0.4);
+        transform: translateY(-2px);
+    }
+
+    .dark-glass-card {
+        background: rgba(24, 24, 27, 0.65);
+        border: 1px solid rgba(63, 63, 70, 0.5);
+        backdrop-filter: blur(14px);
+    }
+    .dark-glass-card:hover {
+        border-color: rgba(56, 189, 248, 0.5);
+        background: rgba(39, 39, 42, 0.85);
+        box-shadow: 0 15px 45px -10px rgba(56, 189, 248, 0.2);
+    }
+
+    .glass-input {
+        background: rgba(24, 24, 27, 0.75);
+        border: 1px solid rgba(63, 63, 70, 0.8);
+        color: #e4e4e7;
+    }
+    .glass-input:focus {
+        border-color: #38bdf8;
+        background: rgba(24, 24, 27, 0.95);
+        box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+        outline: none;
+    }
+
+    @keyframes fade-in-up { 
+        from { opacity: 0; transform: translateY(30px); } 
+        to { opacity: 1; transform: translateY(0); } 
+    }
+    .animate-fade { animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    
+    @keyframes pulse-light {
+        0%, 100% { opacity: 0.85; filter: blur(20px) brightness(1); }
+        50% { opacity: 1; filter: blur(28px) brightness(1.25); }
+    }
+    .animate-light { animation: pulse-light 4s ease-in-out infinite; }
+</style>
+</head>
+<body class="antialiased selection:bg-sky-500/30 selection:text-sky-200">
+
+    <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-[45%] h-[45%] bg-sky-900/25 rounded-full blur-[130px]"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[35%] h-[35%] bg-indigo-900/25 rounded-full blur-[110px]"></div>
+    </div>
+
+    <div class="relative z-10 w-full max-w-[1200px] min-h-[90vh] my-8 mx-4 md:mx-auto bg-[#131316] rounded-[2rem] md:rounded-[3rem] border border-zinc-800/60 shadow-2xl flex flex-col items-center py-16 md:py-24 px-4 sm:px-8 overflow-hidden">
+        
+        <!-- Top Lighting Effect with EXAMIFY.PK in Cyan Box -->
+        <div class="glow-container animate-fade" style="animation-delay: 0.1s;">
+            <div class="light-source flex items-center justify-center pt-1 md:pt-1.5">
+                <span class="font-display font-black text-sky-950 text-xs md:text-base tracking-[0.2em] uppercase z-10 relative drop-shadow-sm">EXAMIFY.PK</span>
+            </div>
+            <div class="volumetric-light animate-light"></div>
+            
+            <h1 class="massive-title animated font-display text-center tracking-tighter mt-[-10px] md:mt-[-15px]" data-text="Coming Soon">
+                Coming Soon
+            </h1>
+            <p class="text-zinc-400 font-semibold mt-6 text-xs sm:text-sm md:text-base tracking-wide text-center px-4 animate-fade opacity-0" style="animation-delay: 0.3s;">
+                Where Preparation Meets Success!
+            </p>
+        </div>
+
+        <div class="mt-16 md:mt-24 mb-12 animate-fade opacity-0 w-full" style="animation-delay: 0.5s;">
+            <p class="text-center text-xs font-bold text-zinc-500 uppercase tracking-[0.2em] mb-6">Launching in</p>
+            
+            <div class="flex items-start justify-center">
+                <div class="timer-block w-16 sm:w-20 md:w-24">
+                    <span id="days" class="font-display timer-number text-2xl sm:text-3xl md:text-5xl">00</span>
+                    <span class="timer-label">Days</span>
+                </div>
+                
+                <span class="timer-colon">:</span>
+                
+                <div class="timer-block w-16 sm:w-20 md:w-24">
+                    <span id="hours" class="font-display timer-number text-2xl sm:text-3xl md:text-5xl">00</span>
+                    <span class="timer-label">Hours</span>
+                </div>
+                
+                <span class="timer-colon">:</span>
+                
+                <div class="timer-block w-16 sm:w-20 md:w-24">
+                    <span id="minutes" class="font-display timer-number text-2xl sm:text-3xl md:text-5xl">00</span>
+                    <span class="timer-label">Minutes</span>
+                </div>
+                
+                <span class="timer-colon hidden sm:block">:</span>
+                
+                <div class="timer-block w-16 sm:w-20 md:w-24 hidden sm:flex">
+                    <span id="seconds" class="font-display timer-number text-2xl sm:text-3xl md:text-5xl text-sky-400">00</span>
+                    <span class="timer-label">Seconds</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action Button Triggering Registration Modal -->
+        <div class="animate-fade opacity-0 w-full flex justify-center mb-16 md:mb-20" style="animation-delay: 0.7s;">
+            <button onclick="openModal()" class="py-4 px-6 md:px-10 rounded-xl glow-btn text-xs md:text-sm font-black uppercase tracking-[0.15em] transition-all flex items-center gap-3 shadow-lg hover:scale-105 active:scale-95">
+                <i class="fas fa-lock text-sky-400"></i>
+                <span>Secure Your Spot In Advance?</span> 
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+
+        <div class="w-full max-w-5xl mx-auto px-4 mt-4 animate-fade opacity-0" style="animation-delay: 0.9s;">
+            <div class="flex items-center justify-center gap-4 mb-10">
+                <div class="h-px w-16 bg-gradient-to-r from-transparent to-zinc-700"></div>
+                <h2 class="font-display text-base md:text-xl font-bold text-zinc-300 uppercase tracking-[0.2em]">What to Expect</h2>
+                <div class="h-px w-16 bg-gradient-to-l from-transparent to-zinc-700"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                
+                <div class="dark-glass-card rounded-2xl p-6 group">
+                    <div class="w-10 h-10 rounded-lg bg-zinc-800 border border-zinc-700 flex items-center justify-center mb-4 text-sky-400 group-hover:scale-110 group-hover:bg-sky-900/30 group-hover:border-sky-500/50 transition-all">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-zinc-100 mb-2">Specific Chapter Tests</h3>
+                    <p class="text-sm text-zinc-400 leading-relaxed">Pinpoint weak areas with highly targeted, chapter-wise assessments designed to build rock-solid foundational strength.</p>
+                </div>
+
+                <div class="dark-glass-card rounded-2xl p-6 group">
+                    <div class="w-10 h-10 rounded-lg bg-zinc-800 border border-zinc-700 flex items-center justify-center mb-4 text-emerald-400 group-hover:scale-110 group-hover:bg-emerald-900/30 group-hover:border-emerald-500/50 transition-all">
+                        <i class="fas fa-file-signature"></i>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-zinc-100 mb-2">Chapter-Wise Past Papers</h3>
+                    <p class="text-sm text-zinc-400 leading-relaxed">Practice with authentic past MDCAT questions logically categorized and sorted by individual chapters.</p>
+                </div>
+
+                <div class="dark-glass-card rounded-2xl p-6 group">
+                    <div class="w-10 h-10 rounded-lg bg-zinc-800 border border-zinc-700 flex items-center justify-center mb-4 text-amber-400 group-hover:scale-110 group-hover:bg-amber-900/30 group-hover:border-amber-500/50 transition-all">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-zinc-100 mb-2">PHY Special Mocks</h3>
+                    <p class="text-sm text-zinc-400 leading-relaxed">Exclusive, highly challenging physics mock exams crafted by experts to prepare you for the toughest scenarios.</p>
+                </div>
+
+                <div class="dark-glass-card rounded-2xl p-6 group">
+                    <div class="w-10 h-10 rounded-lg bg-zinc-800 border border-zinc-700 flex items-center justify-center mb-4 text-rose-400 group-hover:scale-110 group-hover:bg-rose-900/30 group-hover:border-rose-500/50 transition-all">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-zinc-100 mb-2">Final Grand Tests</h3>
+                    <p class="text-sm text-zinc-400 leading-relaxed">Simulate the real MDCAT exam environment with our comprehensive, full-length grand tests before the big day.</p>
+                </div>
+
+                <div class="dark-glass-card rounded-2xl p-6 md:p-8 md:col-span-2 group relative overflow-hidden border-sky-900/50">
+                    <div class="absolute right-0 top-0 w-64 h-64 bg-sky-500/10 rounded-full blur-[80px] pointer-events-none"></div>
+                    <div class="relative z-10 flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-sky-500 to-indigo-600 flex items-center justify-center shrink-0 shadow-lg shadow-sky-900/50 text-white">
+                            <i class="fas fa-database text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-display text-xl md:text-2xl font-extrabold text-white mb-2 tracking-wide uppercase">
+                                Fully Updated Q-Bank <span class="text-sky-400">(2018-2027)</span>
+                            </h3>
+                            <p class="text-sm md:text-base font-medium text-sky-200/70 leading-relaxed max-w-3xl">
+                                Covering <span class="text-white font-bold">ALL</span> provinces of Pakistan. Access a massive, meticulously curated database of questions reflecting the latest syllabus changes and testing patterns from Sindh, Punjab, KPK, Balochistan, and Federal boards.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+    </div>
+
+    <footer class="w-full border-t border-zinc-800/80 mt-12 py-8 relative z-10 animate-fade opacity-0" style="animation-delay: 1s;">
+        <div class="max-w-[1200px] mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <div class="bg-zinc-800/50 p-2 rounded-lg border border-zinc-700">
+                    <i class="fas fa-atom text-sky-400 text-lg"></i>
+                </div>
+                <span class="font-display font-black text-zinc-200 tracking-widest uppercase text-sm md:text-base">EXAMIFY.PK</span>
+            </div>
+            <p class="text-xs text-zinc-500 font-medium text-center md:text-left tracking-wide">
+                &copy; 2026 EXAMIFY.PK. All rights reserved. <span class="hidden sm:inline">Where Preparation Meets Success.</span>
+            </p>
+            <div class="flex gap-4">
+                <a href="https://instagram.com/EXAMIFY_PK" target="_blank" class="w-10 h-10 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 hover:text-pink-500 hover:border-pink-500/50 hover:bg-pink-500/10 transition-all shadow-lg">
+                    <i class="fab fa-instagram text-lg"></i>
+                </a>
+                <a href="https://whatsapp.com/channel/0029Vb6Z0BzLdQehb5QJih11" target="_blank" class="w-10 h-10 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 hover:text-emerald-500 hover:border-emerald-500/50 hover:bg-emerald-500/10 transition-all shadow-lg">
+                    <i class="fab fa-whatsapp text-lg"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <div id="regModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 hidden opacity-0 transition-opacity duration-300">
+        <div class="absolute inset-0 bg-[#09090b]/85 backdrop-blur-md" onclick="closeModal()"></div>
+        
+        <div class="relative z-10 w-full max-w-lg dark-glass-card p-6 md:p-8 rounded-[2rem] overflow-hidden transform scale-95 transition-transform duration-300 shadow-2xl shadow-sky-900/30 border border-zinc-700/80">
+            <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-sky-500/20 via-sky-400 to-sky-500/20"></div>
+            
+            <button onclick="closeModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-zinc-800/50 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-zinc-700 transition-colors border border-zinc-700">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="text-center mb-8 mt-2">
+                <div class="w-14 h-14 rounded-2xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center mx-auto mb-4 text-sky-400 shadow-[0_0_15px_rgba(56,189,248,0.2)]">
+                    <i class="fas fa-rocket text-xl"></i>
+                </div>
+                <h3 class="font-display text-2xl md:text-3xl font-extrabold text-white mb-2 tracking-wide">Register Now</h3>
+                <p class="text-xs md:text-sm text-zinc-400 font-medium leading-relaxed max-w-sm mx-auto">Fill out the details below to join the early access waitlist securely.</p>
+            </div>
+            
+            <form id="regForm" onsubmit="handleFormSubmit(event)" class="space-y-5">
+                <input type="hidden" name="_subject" value="New EXAMIFY.PK Early Registration!">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_template" value="table">
+
+                <div>
+                    <label class="block text-[10px] font-bold text-sky-200/70 uppercase tracking-[0.15em] mb-1.5 pl-1">Full Name</label>
+                    <div class="relative group">
+                        <i class="fas fa-user absolute left-4 top-1/2 -translate-y-1/2 text-sky-500/50 group-focus-within:text-sky-400 transition-colors text-sm"></i>
+                        <input type="text" name="Full Name" required class="w-full glass-input text-sm rounded-xl pl-10 pr-4 py-3.5 placeholder-zinc-600 font-medium" placeholder="e.g. Ali Khan">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-sky-200/70 uppercase tracking-[0.15em] mb-1.5 pl-1">Email Address</label>
+                    <div class="relative group">
+                        <i class="fas fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-sky-500/50 group-focus-within:text-sky-400 transition-colors text-sm"></i>
+                        <input type="email" name="Email Address" required class="w-full glass-input text-sm rounded-xl pl-10 pr-4 py-3.5 placeholder-zinc-600 font-medium" placeholder="ali@example.com">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-[10px] font-bold text-sky-200/70 uppercase tracking-[0.15em] mb-1.5 pl-1">Province</label>
+                        <div class="relative group">
+                            <i class="fas fa-map-location-dot absolute left-4 top-1/2 -translate-y-1/2 text-sky-500/50 group-focus-within:text-sky-400 transition-colors text-sm z-10 pointer-events-none"></i>
+                            <select name="Province" required class="w-full glass-input text-sm rounded-xl pl-10 pr-10 py-3.5 appearance-none font-medium cursor-pointer text-zinc-300">
+                                <option value="" disabled selected class="text-zinc-500">Select Province...</option>
+                                <option value="Sindh" class="bg-zinc-900">Sindh</option>
+                                <option value="Punjab" class="bg-zinc-900">Punjab</option>
+                                <option value="KPK" class="bg-zinc-900">KPK</option>
+                                <option value="Balochistan" class="bg-zinc-900">Balochistan</option>
+                                <option value="Federal (Islamabad)" class="bg-zinc-900">Federal (Islamabad)</option>
+                                <option value="AJK / GB" class="bg-zinc-900">AJK / GB</option>
+                            </select>
+                            <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 text-xs pointer-events-none"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-sky-200/70 uppercase tracking-[0.15em] mb-1.5 pl-1">City</label>
+                        <div class="relative group">
+                            <i class="fas fa-city absolute left-4 top-1/2 -translate-y-1/2 text-sky-500/50 group-focus-within:text-sky-400 transition-colors text-sm"></i>
+                            <input type="text" name="City" required class="w-full glass-input text-sm rounded-xl pl-10 pr-4 py-3.5 placeholder-zinc-600 font-medium" placeholder="e.g. Karachi">
+                        </div>
+                    </div>
+                </div>
+                <div class="pt-4">
+                    <button type="submit" class="w-full py-4 rounded-xl glow-btn text-xs font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2 shadow-lg hover:scale-[1.02] active:scale-95">
+                        <span>Submit Details</span> <i class="fas fa-paper-plane text-sm ml-1"></i>
+                    </button>
+                    <p class="text-center text-[10px] text-zinc-500 mt-4 font-medium"><i class="fas fa-lock mr-1 text-zinc-600"></i> Your data is secured and processed via FormSubmit.</p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Pop-up Modal -->
+    <div id="successPopUp" class="fixed inset-0 z-50 flex items-center justify-center px-4 hidden opacity-0 transition-opacity duration-300">
+        <div class="absolute inset-0 bg-[#09090b]/85 backdrop-blur-md"></div>
+        <div class="relative z-10 w-full max-w-md dark-glass-card p-8 rounded-[2rem] text-center shadow-2xl shadow-emerald-900/30 border border-emerald-500/30">
+            <button onclick="closeSuccessPopUp()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-zinc-800/50 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-zinc-700 transition-colors border border-zinc-700">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/40 flex items-center justify-center mx-auto mb-4 text-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+                <i class="fas fa-check-circle text-3xl"></i>
+            </div>
+            
+            <h3 class="font-display text-2xl font-bold text-white mb-2">You're All Set!</h3>
+            <p class="text-sm text-zinc-300 mb-5 leading-relaxed">Your details have been successfully submitted. For instant updates, follow the <strong>EXAMIFY.PK OFFICIAL!</strong> channel on WhatsApp.</p>
+            
+            <a href="https://whatsapp.com/channel/0029Vb6Z0BzLdQehb5QJih11" target="_blank" onclick="closeSuccessPopUp()" class="w-full py-3.5 mb-3 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-black text-xs uppercase tracking-[0.1em] transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#25D366]/25 hover:scale-[1.02] active:scale-95">
+                <i class="fab fa-whatsapp text-lg"></i> Follow Now for Updates
+            </a>
+            
+            <button onclick="closeSuccessPopUp()" class="w-full py-3 rounded-xl border border-zinc-700 hover:bg-zinc-800 text-zinc-400 font-bold text-xs uppercase tracking-[0.1em] transition-all">
+                Maybe Later
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const launchDate = new Date();
+        launchDate.setDate(launchDate.getDate() + 30);
+        launchDate.setHours(12, 0, 0, 0);
+
+        function updateTimer() {
+            const now = new Date().getTime();
+            const distance = launchDate.getTime() - now;
+
+            if (distance < 0) {
+                document.getElementById("days").textContent = "00";
+                document.getElementById("hours").textContent = "00";
+                document.getElementById("minutes").textContent = "00";
+                const secEl = document.getElementById("seconds");
+                if(secEl) secEl.textContent = "00";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").textContent = String(days).padStart(2, '0');
+            document.getElementById("hours").textContent = String(hours).padStart(2, '0');
+            document.getElementById("minutes").textContent = String(minutes).padStart(2, '0');
+            
+            const secEl = document.getElementById("seconds");
+            if(secEl) secEl.textContent = String(seconds).padStart(2, '0');
+        }
+
+        updateTimer();
+        setInterval(updateTimer, 1000);
+
+        const modal = document.getElementById('regModal');
+        const modalContent = modal.querySelector('.relative.z-10');
+        const successPopUp = document.getElementById('successPopUp');
+        const successContent = successPopUp.querySelector('.relative.z-10');
+
+        function openModal() {
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300); 
+        }
+
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+
+            // Send via FormSubmit asynchronously
+            fetch("https://formsubmit.co/ajax/whoisfaizz@gmail.com", {
+                method: "POST",
+                body: formData
+            }).catch(() => {});
+
+            closeModal();
+            form.reset();
+
+            // Show Success Pop-up
+            successPopUp.classList.remove('hidden');
+            setTimeout(() => {
+                successPopUp.classList.remove('opacity-0');
+                successContent.classList.remove('scale-95');
+                successContent.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeSuccessPopUp() {
+            successPopUp.classList.add('opacity-0');
+            successContent.classList.remove('scale-100');
+            successContent.classList.add('scale-95');
+            setTimeout(() => {
+                successPopUp.classList.add('hidden');
+            }, 300);
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") {
+                if (!modal.classList.contains('hidden')) closeModal();
+                if (!successPopUp.classList.contains('hidden')) closeSuccessPopUp();
+            }
+        });
+    </script>
+</body>
+</html>
